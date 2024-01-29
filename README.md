@@ -1,6 +1,6 @@
 # ProjetGo-FoodCourt
 
-# Projet de centralisation de commande de restaurant
+# Projet de centralisation de commandes de restaurant
 
 # Utilisateurs possible 
     - Restaurants
