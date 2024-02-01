@@ -1,0 +1,29 @@
+.container-filtre {
+    margin: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 70vh;
+    background-image: url("/public/image/backSearch.jpg");
+    gap: 25%;
+}
+  
+  
+.search-bar-nomRest {
+   width: 50vh;
+   height: 50px;
+   border: 2px solid #1879ca;
+   border-radius: 8px;
+}
+
+
+.bouton-rechercher{
+    width: 23vh;
+    height: 50px;
+    background-color: #000000;
+    border: 2px solid #000000;
+    border-radius: 8px;
+    color: white;
+    margin-left: 1vh;
+}
+  

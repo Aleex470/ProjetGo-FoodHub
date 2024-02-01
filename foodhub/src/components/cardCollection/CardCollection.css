@@ -1,0 +1,39 @@
+#div-carcollection{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin : 0px; 
+    margin-top: 30px; 
+}
+
+
+.car-item {
+    border: 2px solid #1879ca;
+    padding: 0;
+    background-color: white;
+    width: 66vh; /* 33.33% pour 3 items par ligne avec espacement de 20px */
+    margin: 15px 7px;
+    height: 58vh;
+  }
+
+  .car-image{
+    
+    margin-left: 18px;
+    width: 50vh; 
+    height: 30vh; 
+  }
+  
+
+  @media screen and (max-width : 899px) {
+    .car-item {
+        width: 45%; /* 33.33% pour 3 items par ligne avec espacement de 20px */
+        height: 62vh;
+      }
+  }
+
+
+    
+
+
+

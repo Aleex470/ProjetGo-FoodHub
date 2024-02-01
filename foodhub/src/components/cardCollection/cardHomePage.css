@@ -1,0 +1,29 @@
+.div-img-homePage{
+    height: 90vh;
+    background-image: url("/public/image/backSearch.jpg");
+    align-items: center;
+}
+
+#div-cardHomePage{
+    margin-top: 6vh;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.car-item-homePage{
+    border: 2px solid #1879ca;
+    padding: 0;
+    background-color: white;
+    width: 65vh; /* 33.33% pour 3 items par ligne avec espacement de 20px */
+    margin: 15px 7px;
+    height: 53vh;
+}
+
+.ul-connect-restau{
+}
+
+
+
+

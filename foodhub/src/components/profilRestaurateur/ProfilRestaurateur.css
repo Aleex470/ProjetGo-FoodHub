@@ -1,0 +1,29 @@
+.div-entete-pp-resta-et-navBar{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 40%;
+}
+
+
+.div-entete-pp-restau{
+    display: flex;
+    flex-direction: row;
+}
+
+.div-entete-pp-restau-icone{
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    gap: 200%;
+}
+
+
+
+.photo-restaurant{
+    margin-top: 50px;
+    margin-left: 20px;
+    width : 50vh;
+    height: 300px;
+    border-radius: 100%;
+}
