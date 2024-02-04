@@ -1,69 +1,76 @@
 import { useState } from "react";
 
-export default function CompteClient(){
-    //Identifiant connexion client
-    const [usernameClient, setUsernameClient] = useState('');
-    const [passwordClient, setPasswordClient] = useState('');
-    const handleLoginClient = () => {
-        // Votre logique de vérification des identifiants
-        // Ici, j'utilise une condition simple pour simuler une vérification incorrecte
-        if (usernameClient === 'khalifa' && passwordClient === 'khalifa') {
-            setError('');
-            console.log("Connexion résussie")
-        } else {
-            setError('Identifiants incorrects. Veuillez réessayer.');
-        }
-    };
+export default function InscriptionUtilisateur() {
+  const [prenom, setPrenom] = useState("");
+  const [nom, setNom] = useState("");
+  const [codePostal, setCodePostal] = useState("");
+  const [identifiant, setIdentifiant] = useState("");
+  const [motDePasse, setMotDePasse] = useState("");
+  const [error, setError] = useState("");
 
-    //Identifiant connexion restaurant
-    const [usernameRestaurateur, setUsernameRestaurateur] = useState('');
-    const [passwordRestaurateur, setPasswordRestaurateur] = useState('');
+  const handleInscription = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/inscription", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          prenom: prenom,
+          nom: nom,
+          codePostal: codePostal,
+          identifiant: identifiant,
+          motDePasse: motDePasse,
+        }),
+      });
+  
+      if (!response.ok) {
+        const data = await response.json();
+        setError(data.error || "Erreur lors de l'inscription");
+      } else {
+        setError("");
+        console.log("Inscription réussie");
+        console.log("Données envoyées :", {
+            prenom: prenom,
+            nom: nom,
+            codePostal: codePostal,
+            identifiant: identifiant,
+            motDePasse: motDePasse,
+          });
+          
+      }
+    } catch (error) {
+      console.error("Erreur réseau :", error);
+      setError("Erreur réseau");
+    }
+  };
+  
 
-    const [error, setError] = useState('');
-
-    const handleLoginRestaurateur = () => {
-        // Votre logique de vérification des identifiants
-        // Ici, j'utilise une condition simple pour simuler une vérification incorrecte
-        if (usernameClient === 'khalifa' && passwordClient === 'khalifa') {
-            setError('');
-            console.log("Connexion résussie")
-        } else {
-            setError('Identifiants incorrects. Veuillez réessayer.');
-        }
-    };
-
-    return (
-          <div id='div-form-connection-restaurant'>
-            <img src="/image/client.png" alt=""></img>
-            <form  id="form-connection-client" action="/action_page.php">
-                <h1>Compte Client</h1>
-                <div>
-                    <label for="prenomRestaurateur">Prénom*</label><br></br>
-                    <input type="text" className="username" value={usernameRestaurateur} onChange={(e) => setUsernameRestaurateur(e.target.value)} placeholder="Nom du restaurant..." />
-                </div>
-                <div>
-                    <label for="prenomRestaurateur">Nom*</label><br></br>
-                    <input type="text" className="username" value={usernameRestaurateur} onChange={(e) => setUsernameRestaurateur(e.target.value)} placeholder="Nom du restaurant..." />
-                </div>
-                <div>
-                    <label for="codePostalRestaurateur">Code postal*</label><br></br>
-                    <input type="text" className="username" value={usernameRestaurateur} onChange={(e) => setUsernameRestaurateur(e.target.value)} placeholder="Nom du restaurant..." />
-                </div>
-                <div>
-                    <label for="identifiantRestaurateur">Identifiant*</label><br></br>
-                    <input type="text" className="username" value={usernameRestaurateur} onChange={(e) => setUsernameRestaurateur(e.target.value)} placeholder="Nom du restaurant..." />
-                </div>
-                <div>
-                    <label for="mdpRestaurateur">Mot de passe*</label><br></br>
-                    <input type="password" className="username" value={usernameRestaurateur} onChange={(e) => setUsernameRestaurateur(e.target.value)} placeholder="Nom du restaurant..." />
-                </div>
-                <p style={{ color: 'red', fontSize : "14px" }}>{error}</p>
-                <button className="bouton-connexion" onClick={handleLoginRestaurateur}>Créer le compte</button>
-                <ul className="div-createcmp-mdo">
-                    <li><a className="a-connextion" href="#crationCompte">Se connecter</a></li>
-                    <li><a className="a-connextion" href="#ReinitialisationMDP">Aide</a></li>
-                </ul>  
-            </form>
-          </div>
-    );
+  return (
+    <div>
+      <h1>Inscription</h1>
+      <div>
+        <label>Prénom</label>
+        <input type="text" value={prenom} onChange={(e) => setPrenom(e.target.value)} />
+      </div>
+      <div>
+        <label>Nom</label>
+        <input type="text" value={nom} onChange={(e) => setNom(e.target.value)} />
+      </div>
+      <div>
+        <label>Code Postal</label>
+        <input type="text" value={codePostal} onChange={(e) => setCodePostal(e.target.value)} />
+      </div>
+      <div>
+        <label>Identifiant</label>
+        <input type="text" value={identifiant} onChange={(e) => setIdentifiant(e.target.value)} />
+      </div>
+      <div>
+        <label>Mot de Passe</label>
+        <input type="password" value={motDePasse} onChange={(e) => setMotDePasse(e.target.value)} />
+      </div>
+      <p style={{ color: 'red', fontSize: "14px" }}>{error}</p>
+      <button onClick={handleInscription}>S'inscrire</button>
+    </div>
+  );
 }

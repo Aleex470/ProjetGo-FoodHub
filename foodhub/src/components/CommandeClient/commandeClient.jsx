@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { BsList, BsCart, BsBell } from "react-icons/bs";
 import { useParams } from "react-router-dom";
-import {handleCommanderExported} from '../cardCollection/CardCollection'
 import "./commandeClient.css";
 
 export default function CommandeClient() {
@@ -54,7 +53,7 @@ export default function CommandeClient() {
 
   const hangleClick = () => {
     setShowMenuList(!showMenuList);
-    console.log("L'objet = "+handleCommanderExported(1))
+    console.log("L'objet = ")
   };
 
   return (

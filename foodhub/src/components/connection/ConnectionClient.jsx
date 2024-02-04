@@ -8,19 +8,38 @@ function Connection({ setOpenModal }) {
     const [usernameClient, setUsernameClient] = useState('');
     const [passwordClient, setPasswordClient] = useState('');
     const [pageProfil, setPageProfil] = useState(null)
-    const handleLoginClient = () => {
-        // Votre logique de vérification des identifiants
-        // Ici, j'utilise une condition simple pour simuler une vérification incorrecte
-        if (usernameClient === '' && passwordClient === '') {
-            setError('');
-            navigate('/profil-client');
-            console.log("Connexion résussie")
-        } else {
-            setError('Identifiants incorrects. Veuillez réessayer.');
-        }
-    };
-
     const [error, setError] = useState('');
+
+    const handleLoginClient = async () => {
+      try {
+        const response = await fetch("http://localhost:8080/login-client", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: new URLSearchParams({
+            username: usernameClient,
+            password: passwordClient,
+          }),        
+        });
+  
+        if (response.ok) {
+          // Connexion réussie
+          setError('');
+          console.log("Connexion réussie");
+          navigate('/profil-client');
+          // Rediriger ou effectuer d'autres actions après la connexion réussie
+        } else {
+          // Afficher l'erreur en cas d'identifiants incorrects
+          const data = await response.json();
+          setError(data.error || "Identifiants incorrects. Veuillez réessayer.");
+        }
+      } catch (error) {
+        console.error("Erreur réseau :", error);
+        setError("Erreur réseau");
+      }
+    };
+  
 
   return (
     <div className="modalBackground">
