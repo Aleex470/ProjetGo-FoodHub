@@ -85,6 +85,11 @@
     font-size: 30px;
  }
 
+ .div-card-menu-restaurant{
+    display: flex;
+    flex-direction: row;
+ }
+
 
 @media screen and (max-width : 767px) {
 
