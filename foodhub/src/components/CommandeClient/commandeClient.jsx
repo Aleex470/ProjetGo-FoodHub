@@ -1,26 +1,43 @@
 import React, { useState, useEffect } from "react";
 import { BsList, BsCart, BsBell } from "react-icons/bs";
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 import "./commandeClient.css";
 
 export default function CommandeClient() {
+
+  const navigate = useNavigate();
+
   const location = useLocation();
   const menus = location.state ? location.state.menus : [];
 
   const [showMenuList, setShowMenuList] = useState(window.innerWidth <= 767);
   const [contenuPanier, setContenuPanier] = useState([]);
-  const [selectedRestaurant, setSelectedRestaurant] = useState(null);
   const [selectedTab, setSelectedTab] = useState([]);
+  const [commandeAValider, setCommandeAValider] = useState()
+ 
 
   const hangleContenuPanier = (index) => {
     // Ajoutez le menu sélectionné à l'état du panier
-    setContenuPanier((prevPanier) => [...prevPanier, menus[index]]);
+      setContenuPanier((prevPanier) => {
+        const nouveauPanier = [...prevPanier, menus[index]];
+        console.log(nouveauPanier);
+        setCommandeAValider(nouveauPanier)
+        return nouveauPanier;
+      });
   };
 
   const hangleClick = () => {
     setShowMenuList(!showMenuList);
     console.log("L'objet =", menus);
+  };
+
+  const handleClickValidationCommande = () => {
+    // Naviguer vers la page de validation de la commande avec le panier comme paramètre
+    console.log('Contenu du panier à transmettre :', contenuPanier);
+    navigate('/valider-commande', { state: { panier: contenuPanier } });
   };
 
   return (
@@ -45,7 +62,7 @@ export default function CommandeClient() {
             />
           </div>
           <li>
-            <a className="IconePC" href="#div-form-connection-client">
+            <a className="IconePC" href="valider-commande" onClick={handleClickValidationCommande}>
               <BsCart />
               {contenuPanier.length > 0 && (
                 <span className="cart-item-count">

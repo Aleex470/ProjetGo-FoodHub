@@ -27,6 +27,7 @@ function Connection({ setOpenModal }) {
           // Connexion réussie
           setError('');
           console.log("Connexion réussie");
+          sessionStorage.setItem('username',usernameClient);
           navigate('/profil-client');
           // Rediriger ou effectuer d'autres actions après la connexion réussie
         } else {
@@ -40,7 +41,7 @@ function Connection({ setOpenModal }) {
       }
     };
   
-
+  sessionStorage.setItem('username',usernameClient);
   return (
     <div className="modalBackground">
       <div className="modalContainer">

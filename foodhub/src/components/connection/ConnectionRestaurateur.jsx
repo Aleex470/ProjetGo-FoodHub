@@ -27,6 +27,7 @@ function ConnectionRestaurant({ setOpenModalR }) {
           // Connexion réussie
           setError('');
           console.log("Connexion réussie");
+          sessionStorage.setItem('username',usernameRestaurateur);
           navigate('/profil-restaurateur');
           // Rediriger ou effectuer d'autres actions après la connexion réussie
         } else {
@@ -40,8 +41,6 @@ function ConnectionRestaurant({ setOpenModalR }) {
       }
     };
 
-   
-  sessionStorage.setItem('username',usernameRestaurateur);
   
 
   return (

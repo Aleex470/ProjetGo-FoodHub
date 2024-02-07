@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './CardCollection.css';
-import { addDoc, collection, serverTimestamp, onSnapshot } from "firebase/firestore";
+import {collection, onSnapshot } from "firebase/firestore";
 import { db } from '../../API/firebase';
 
 export default function CardCollection({ adresseRecherche }) {
@@ -66,11 +66,13 @@ export default function CardCollection({ adresseRecherche }) {
             imgPP,
             menus: [
               {
+                userNameRestaurateur,
                 dessert,
                 entree,
                 imgMenu,
                 nomMenu,
                 plat,
+
               },
             ],
             timestamp,
@@ -79,6 +81,7 @@ export default function CardCollection({ adresseRecherche }) {
         result.push(newUser);
       } else {
         result[existingUserIndex][userNameRestaurateur].menus.push({
+          userNameRestaurateur,
           dessert,
           entree,
           imgMenu,
@@ -103,7 +106,7 @@ export default function CardCollection({ adresseRecherche }) {
 
         const data = await response.json();
         setDonneeRestaurateursBD(data);
-        console.log(data);
+        console.log("Donnée restaurateur = " +data);
       } catch (error) {
         console.error("Erreur réseau :", error);
         setError("Erreur lors de la récupération des restaurateurs");
