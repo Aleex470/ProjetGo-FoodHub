@@ -81,7 +81,7 @@ export default function ValidationCommande({ senderType, senderID, receiverID })
       <div>
         {messages.map((message, index) => (
           <div key={index}>
-            <p>{message.content}</p>
+            <p>{(message.content).includes(username) ? message.content : ""}</p>
           </div>
         ))}
       </div>

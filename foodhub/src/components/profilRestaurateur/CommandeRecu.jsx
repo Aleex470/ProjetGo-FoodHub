@@ -56,7 +56,7 @@ export default function CommandeRecu({ senderType, senderID, receiverID }) {
     const message = {
       senderType,
       senderID,
-      receiverID,
+      receiverID ,
       messageType: 'text',
       content,
     };
@@ -97,10 +97,10 @@ export default function CommandeRecu({ senderType, senderID, receiverID }) {
             <div key={index}>
               {items.map((item, idx) => (
                 <div key={idx}>
-                  {!clickedButtons.includes(item.message) ? ( // Vérifie si le bouton n'a pas été cliqué
+                  {!clickedButtons.includes(item.message+" "+item.receiverID) ? ( // Vérifie si le bouton n'a pas été cliqué
                     <>
-                      <input value={item.message} disabled={clickedButtons.includes(item.message)} />
-                      <button onClick={() => handleSendToReceiver(item.message)} disabled={clickedButtons.includes(item.message)}>{item.receiverID}</button>
+                      <input value={item.message} disabled={clickedButtons.includes(item.message+" "+item.receiverID)} />
+                      <button onClick={() => handleSendToReceiver(item.message+" "+item.receiverID)} disabled={clickedButtons.includes(item.message+" "+item.receiverID)}>{item.receiverID}</button>
                     </>
                   ) : null}
                 </div>

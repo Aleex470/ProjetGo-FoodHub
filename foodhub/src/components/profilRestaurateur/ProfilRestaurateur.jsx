@@ -5,8 +5,8 @@ import { storage } from "../../API/firebase";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { db } from "../../API/firebase"; // Assurez-vous d'ajuster le chemin d'accès en fonction de votre structure de projet Firebase
 import { addDoc, collection, serverTimestamp,onSnapshot  } from "firebase/firestore";
-import ValidationCommande from "../validationCommande/ValidationCommande";
-import CommandeRecu from "./CommandeRecu";
+import CommandeRecu from "./CommandeRecu"
+
 
 export default function ProfilRestaurateur(){
 
@@ -23,6 +23,7 @@ export default function ProfilRestaurateur(){
     const [file, setFile] = useState(null);
     const [photoProfil, setPhotoProfil] = useState(null);
     const [progress, setProgress] = useState(null);
+    const [errors, setErrors] = useState({})
     const [isSubmit, setIsSubmit] = useState(false);
     const [username, setUsername] = useState(null);
     const [error, setError] = useState({})
@@ -32,7 +33,7 @@ export default function ProfilRestaurateur(){
     const [restaurateurs, setRestaurateurs] = useState([]);
 
 
-    
+    //Mise à jour des fichiers ajoutés
     useEffect(()=>{
         const fetchData = async () => {
             try {
@@ -119,7 +120,7 @@ export default function ProfilRestaurateur(){
      }
 
      //Récupération donnée firebase
-     const unsub = onSnapshot(collection(db, storedUsername), (snapshot) => {
+     const unsub = onSnapshot(collection(db, username), (snapshot) => {
         let list = [];
         snapshot.docs.forEach((doc) => {
           list.push({ ...doc.data() });
@@ -145,14 +146,9 @@ export default function ProfilRestaurateur(){
         setIsSubmit(true);
         
         try {
-            if (!userName) {
-                console.error("Le nom d'utilisateur est vide ou non défini.");
-                return;
-            }
-    
             // Utilisation de la valeur du paramètre 'userName' comme nom de collection
-            data.userNameRestaurateur = userName;
-            await addDoc(collection(db, 'votreCollection'), { // Remplacez 'votreCollection' par le nom de votre collection Firestore
+            data.userNameRestaurateur = userName
+            await addDoc(collection(db, userName), {
                 ...data,
                 timestamp: serverTimestamp(),
             });
@@ -160,7 +156,7 @@ export default function ProfilRestaurateur(){
             // Réinitialiser le formulaire après la soumission réussie
             setData(initialise);
             setFile(null);
-            setPhotoProfil(null);
+            setPhotoProfil(null)
             setProgress(null);
             setIsSubmit(false);
         } catch (error) {
@@ -226,6 +222,6 @@ export default function ProfilRestaurateur(){
       </p>
      </form>
      <CommandeRecu senderType="restaurateur" senderID={username} receiverID="khalifa" />
-    </>
+        </>
     )
 }
