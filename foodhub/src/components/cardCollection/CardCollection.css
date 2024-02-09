@@ -1,36 +1,41 @@
-#div-carcollection{
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin : 0px; 
-    margin-top: 30px; 
+
+#div-cardcollection-pc{
+  margin-top: 6vh;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 3vh;
+}
+
+.card-item-pc{
+  border: 2px solid #1879ca;
+  background-color: white;
+  width: 65vh; /* 33.33% pour 3 items par ligne avec espacement de 20px */
+  height: 60vh;
+}
+
+.card-image-pc{
+  /*size: "medium";
+  width: 55vh;
+  height: auto;*/
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  height: 35vh;
+  width: 50vh;
+}
+
+.btn-commander{
+  background-color: black;
+  color: white;
+  width: 15vh;
+  height: 5vh;
+  border: 2px solid black;
 }
 
 
-.car-item {
-    border: 2px solid #1879ca;
-    padding: 0;
-    background-color: white;
-    width: 66vh; /* 33.33% pour 3 items par ligne avec espacement de 20px */
-    margin: 15px 7px;
-    height: 58vh;
-  }
 
-  .car-image{
-    
-    margin-left: 18px;
-    width: 50vh; 
-    height: 30vh; 
-  }
-  
-
-  @media screen and (max-width : 899px) {
-    .car-item {
-        width: 45%; /* 33.33% pour 3 items par ligne avec espacement de 20px */
-        height: 62vh;
-      }
-  }
 
 
     

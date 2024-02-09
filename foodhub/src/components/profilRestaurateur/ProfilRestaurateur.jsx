@@ -7,6 +7,8 @@ import { db } from "../../API/firebase"; // Assurez-vous d'ajuster le chemin d'a
 import { addDoc, collection, serverTimestamp,onSnapshot  } from "firebase/firestore";
 import CommandeRecu from "./CommandeRecu"
 
+import ValidationCommande from "../validationCommande/ValidationCommande";
+
 
 export default function ProfilRestaurateur(){
 
@@ -15,7 +17,8 @@ export default function ProfilRestaurateur(){
         nomMenu : "",
         entree : "",
         plat : "",
-        dessert : ""
+        dessert : "",
+        imgMenu : ""
     }
 
     const [data, setData] = useState(initialise);
@@ -23,10 +26,10 @@ export default function ProfilRestaurateur(){
     const [file, setFile] = useState(null);
     const [photoProfil, setPhotoProfil] = useState(null);
     const [progress, setProgress] = useState(null);
-    const [errors, setErrors] = useState({})
     const [isSubmit, setIsSubmit] = useState(false);
     const [username, setUsername] = useState(null);
     const [error, setError] = useState({})
+    const [loading, setLoading] = useState(false)
 
     const [users, setUsers] = useState([]);
 
@@ -51,7 +54,10 @@ export default function ProfilRestaurateur(){
           };
       
           //fetchData();
+          
         const uploadFile = () =>{ 
+
+        if (photoProfil) {  
             const name = new Date().getTime() + file.name;
             const storageRef = ref(storage, file.name)
             const uploadTask = uploadBytesResumable(storageRef,file);
@@ -108,33 +114,38 @@ export default function ProfilRestaurateur(){
                 })
             }
             );
+        } else {
+            console.log("Les fichiers ou leurs noms sont null");
+        }
         }
 
-     photoProfil && file && uploadFile()
-
-     // Récupérer le nom d'utilisateur depuis sessionStorage
-     const storedUsername = sessionStorage.getItem('username');
-     if (storedUsername) {
-        setUsername(storedUsername);
-        console.log("username = " + storedUsername);
-     }
-
-     //Récupération donnée firebase
-     const unsub = onSnapshot(collection(db, username), (snapshot) => {
-        let list = [];
-        snapshot.docs.forEach((doc) => {
-          list.push({ ...doc.data() });
-        });
-        setUsers(list);
-      }, (error) => {
-        console.log("Erreur de récupération des données Firestore", error);
-      });
-  
-      return () => {
-        unsub();
-      };
+       file && uploadFile()
+    
     },[file, photoProfil, restaurateurs])
 
+    useEffect(() => {
+        // Récupérer le nom d'utilisateur depuis sessionStorage
+        const storedUsername = sessionStorage.getItem('username');
+        if (storedUsername) {
+            setUsername(storedUsername);
+            console.log("username = " + storedUsername);
+    
+            // Récupération donnée firebase
+            const unsub = onSnapshot(collection(db, storedUsername), (snapshot) => {
+                let list = [];
+                snapshot.docs.forEach((doc) => {
+                    list.push({ ...doc.data() });
+                });
+                setUsers(list);
+            }, (error) => {
+                console.log("Erreur de récupération des données Firestore", error);
+            });
+    
+            return () => {
+                unsub();
+            };
+        }
+    }, []);
     
 
     const handleChange = (e)=>{
@@ -165,12 +176,15 @@ export default function ProfilRestaurateur(){
         }
     };
     
+    const senderType = "restaurateur";
+    const senderID = "lagondole"; // Remplacez "restaurateur1" par l'identifiant du restaurateur réel
+    const receiverID = "lesenf"
 
     return(
         <>
         <div className='div-entete-pp-resta-et-navBar'>
             <div className='div-entete-pp-restau'>
-                <img className="photo-restaurant" src="" alt=""/>
+                <img className="photo-restaurant" src={users.length > 0 ? users[0].imgPP : ""} alt=""/>
                 <h1>{username}</h1>
             </div>
             <div className='div-entete-pp-restau-icone'>
@@ -189,6 +203,7 @@ export default function ProfilRestaurateur(){
             </ul>
         </div>
     <form onSubmit={(e) => handleSubmit(e, username)}>
+        <CommandeRecu senderType={senderType} senderID={senderID} receiverID={receiverID} />
         <label>Nom du menu </label>
         <input type="text" name="nomMenu" onChange={handleChange} value={nomMenu}/>
         <br></br>
@@ -211,17 +226,17 @@ export default function ProfilRestaurateur(){
          disabled={progress !== null && progress < 100}
         >Ajouter</button>
         <p>{username}</p>
-        <p>
+        <p className="p-image">
         {
           users.map((user, index) => (
-          <div key={index}>
+          <div className="car-item" key={index}>
             Nom du restaurant : {user.userNameReastaurateur}, Menu : {user.nomMenu}, Plat : {user.plat}, Dessert : {user.dessert}
-            <img src={user.imgMenu} alt=''/>
+            <img className="car-image" sizes="medium" src={user.imgMenu} alt=''/>
          </div>))
         }
       </p>
      </form>
-     <CommandeRecu senderType="restaurateur" senderID={username} receiverID="khalifa" />
-        </>
+     
+    </>
     )
 }

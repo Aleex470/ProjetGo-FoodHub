@@ -8,6 +8,7 @@ export default function CommandeRecu({ senderType, senderID, receiverID }) {
   const [messages, setMessages] = useState([]);
   const [clickedButtons, setClickedButtons] = useState([]); // État pour suivre les boutons cliqués
   const socketRef = useRef(null);
+  const [notification, setNotification] = useState(0)
 
   useEffect(() => {
     console.log('Contenu de la commande du client:', panier);
@@ -68,9 +69,29 @@ export default function CommandeRecu({ senderType, senderID, receiverID }) {
     setClickedButtons(prevClickedButtons => [...prevClickedButtons, content]);
   };
 
+  useEffect(() => {
+    let totalNotifications = 0; // Variable pour stocker le nombre total de notifications
+
+    // Calculer le nombre total de notifications à partir des messages
+    messages.forEach(message => {
+      const parts = message.content.split('@').map(part => part.trim()).filter(part => part !== '');
+      parts.forEach(part => {
+        const subParts = part.split('#').map(subPart => subPart.trim()).filter(subPart => subPart !== '');
+        if (subParts.length === 2) {
+          totalNotifications++;
+        }
+      });
+    });
+
+    // Mettre à jour l'état de la notification avec le nombre total calculé
+    setNotification(totalNotifications);
+  }, [messages]);
+
+ 
+
   return (
     <>
-      <h1>Valider votre commande</h1>
+      <h1>Valider votre commande <span>[ {notification} ]</span></h1>
       {panier.map((item, index) => (
         <div key={index}>
           <p>{item.nomMenu}</p>
@@ -109,19 +130,12 @@ export default function CommandeRecu({ senderType, senderID, receiverID }) {
           );
         })}
       </div>
-
-      {/* Champ d'entrée et bouton pour envoyer des messages */}
-      <div>
-        <input
-          type="text"
-          value={messageInput}
-          onChange={(e) => setMessageInput(e.target.value)}
-          placeholder="Entrez votre message..."
-        />
-        <button onClick={handleSendMessage}>Envoyer</button>
-      </div>
-
-      <button>Valider</button>
     </>
   );
 }
+
+
+
+
+/*
+ */

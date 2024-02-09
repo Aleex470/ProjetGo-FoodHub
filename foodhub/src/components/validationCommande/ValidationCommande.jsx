@@ -14,10 +14,18 @@ export default function ValidationCommande({ senderType, senderID, receiverID })
     console.log('Contenu du panier dans ValidationCommande:', panier);
   }, [panier]);
 
+  useEffect(()=>{
+
+    const storedUsername = sessionStorage.getItem('username');
+    if (storedUsername) {
+       setUsername(storedUsername);
+       console.log("username = " + storedUsername);
+    }
+  })
+
   useEffect(() => {
     // Initialiser la connexion WebSocket
     socketRef.current = new WebSocket(`ws://localhost:8080/ws?senderType=${senderType}&senderID=${senderID}&receiverID=${receiverID}`);
-   receiverID = panier[0].userNameRestaurateur;
     // Écouter les messages du serveur
     socketRef.current.onmessage = (event) => {
       const message = JSON.parse(event.data);
@@ -89,11 +97,11 @@ export default function ValidationCommande({ senderType, senderID, receiverID })
       {/* Champ d'entrée et bouton pour envoyer des messages */}
       <div>
         <input
-          name={contenuCommandeStringEtIden}
+        
           typeA="text"
           value={messageInput}
           placeholder="tape V pour valider"
-          onChange={(e) => setMessageInput(e.target.name)}
+          onChange={(e) => setMessageInput(e.target.value)}
         />
         <button onClick={handleSendMessage}>Valider la commande</button>
       </div>

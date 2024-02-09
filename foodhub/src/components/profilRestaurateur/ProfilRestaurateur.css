@@ -18,12 +18,30 @@
     gap: 200%;
 }
 
-
-
 .photo-restaurant{
    size: "medium";
    height: 150px;
    width: 150;
    border-radius: "50%";
    justify-content: center;
+}
+
+.car-item {
+    border: 2px solid #1879ca;
+    padding: 0;
+    background-color: white;
+    width: 70vh; 
+    height: 50vh;
+
+  }
+
+  .car-image{
+
+    width: 75vh; 
+    height: 40vh; 
+  }
+
+.p-image{
+   display: flex;
+    flex-direction: row;
 }

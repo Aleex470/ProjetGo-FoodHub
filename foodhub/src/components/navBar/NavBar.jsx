@@ -31,7 +31,7 @@ function NavBar() {
     return (
         <>
             <ul className='div-menu-navbar'>
-                <li><button onClick={hangleClick} className='menu'><BsList/></button></li>
+                <li><button onClick={hangleClick} className='btn-menu-accueil'><BsList/></button></li>
                 <ul className={showMenuList ? "ul-navbar-responsive" : "ul-navbar" } onClick={() => setShowMenuList(false)}>
                     <li><a className="a" href="#restaurant-disponible">Accueil</a></li>
                     <li><a className="a" href="#Footer-div">A propos</a></li>
@@ -40,7 +40,7 @@ function NavBar() {
                        onClick={() => {
                         setModalOpenR(true);
                        }}
-                    >Connexion restau</a></li>
+                    >Connexion restaurateur</a></li>
                     <li><a className='Explorer' href="creation-compte-restaurateur">Ajoutez un Restaurant</a></li>   
                 </ul>
                 <li><a className="Icone" href="#div-form-connection-client" 

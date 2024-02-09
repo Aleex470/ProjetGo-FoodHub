@@ -1,9 +1,17 @@
 // Search.jsx
-import React, { useState } from 'react';
-import { BsList, BsCart, BsBell } from "react-icons/bs";
+import React, { useState, useEffect } from 'react';
+import { BsList, BsCart, BsBell, BsFillPersonFill } from "react-icons/bs";
 import './Search.css';
 
-export default function Search({ onAdresseChange }) {
+
+export default function Search({ onAdresseChange }){
+
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalOpenR, setModalOpenR] = useState(false);
+
+
+
+
   const [adresse, setAdresse] = useState('');
 
   const handleInputChange = (e) => {
@@ -15,26 +23,58 @@ export default function Search({ onAdresseChange }) {
     onAdresseChange(adresse);
   };
 
+
+  const [showMenuList, setShowMenuList] = useState(window.innerWidth <= 767);
+
+ 
+
+  useEffect(() => {
+      const handleResize = () => {
+          setShowMenuList(window.innerWidth <= 16);
+      };
+
+      window.addEventListener('resize', handleResize);
+
+      return () => {
+          window.removeEventListener('resize', handleResize);
+      };
+  }, []);
+
   return (
-    <div className="container-filtre">
-      <button className='menu'><BsList /></button>
-      <div>
-        <input
-          type="text"
-          value={adresse}
-          onChange={handleInputChange}
-          className="search-bar-nomRest"
-          placeholder="Saisir l'adresse"
-        />
-        <button onClick={handleRechercher} className="bouton-rechercher">
-          Trouver un restaurant
-        </button>
-      </div>
-      <a className="aPC" href="#restaurant-disponible">
-        <BsBell/>
-        <span>0</span>
-      </a>
+      <>
+          
+          <ul className='div-menu-navbar-pc'>
+              <li><button className='btn-menu-accueil-pc'><BsList/></button></li>
+              <ul className={showMenuList ? "ul-navbar-responsive" : "ul-navbar" } onClick={() => setShowMenuList(false)}>
+                  <li><a className="a" href="#restaurant-disponible">Accueil</a></li>
+                  <div>
+                      <input
+                        type="text"
+                        value={adresse}
+                        onChange={handleInputChange}
+                        className="search-bar-nomRest"
+                        placeholder="Saisir l'adresse"
+                      />
+                      <button onClick={handleRechercher} className="bouton-rechercher">
+                        Trouver un restaurant
+                      </button>
+                  </div>   
+              </ul>
+              <li>
+                <a className="icone-notification" href="#div-form-con">
+                   <BsBell/>
+                   <span className="card-item-notification">0</span>
+                </a>
+              </li>
+         </ul>
+         <div className='ecart'>
+
+         </div>
+        
+          {/*modalOpen && <Connection setOpenModal={setModalOpen} />*/}
+          {/*modalOpenR && <ConnectionRestaurant setOpenModalR={setModalOpenR} />*/}
       
-    </div>
-  );
+      </>
+  )
 }
+

@@ -37,15 +37,7 @@ export default function CardHomePage() {
     },
   ];
 
-  const hangleContenuPanier = (index) => {
-    const selectedMenu = listeDesPlats[index];
-    setContenuPanier([...contenuPanier, selectedMenu]);
-    console.log(contenuPanier[index])
-  };
-
-  const hangleClick = () => {
-    setShowMenuList(!showMenuList);
-  };
+ 
 
   return (
     <>
@@ -54,10 +46,10 @@ export default function CardHomePage() {
       </div>
       <div id="div-cardHomePage">
         {listeDesPlats.map((car, index) => (
-          <div className='car-item-homePage' key={index}>
-            <img alt='' className='car-image' src={car.imageUrl} />
-            <ul className='ul-connect-restau'>
-              <h2>{car.description}</h2>
+          <div className='card-item-homePage' key={index}>
+            <img alt='' className='car-image-homePage' src={car.imageUrl} />
+            <ul style={{justifyContent : "center"}} className='ul-connect-restau'>
+              <h3>{car.description}</h3>
               <a href={car.href}>{car.url}</a>
             </ul>
           </div>

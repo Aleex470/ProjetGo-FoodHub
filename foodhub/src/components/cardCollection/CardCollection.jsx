@@ -9,7 +9,7 @@ export default function CardCollection({ adresseRecherche }) {
   const [error, setError] = useState({});
   const [donneeRestaurateursBD, setDonneeRestaurateursBD] = useState([]);
   const [donneeFirebase, setDonneeFirebase] = useState([]);
-  const [tabIdentifiantRestaurateur, settabIdentifiantRestaurateur] = useState(["lagondole", "katia", "otacos"]);
+  const [tabIdentifiantRestaurateur, settabIdentifiantRestaurateur] = useState(["lagondole", "katia", "otacos", "kfc"]);
   const navigate = useNavigate();
 
   const createSnapshotListener = (username) => {
@@ -147,20 +147,21 @@ export default function CardCollection({ adresseRecherche }) {
   };
 
   return (
-    <div id="div-carcollection">
+    <div id="div-cardcollection-pc">
       {filteredRestaurants.map((restaurateur, index) => {
         const [username, { imgPP, nomRestaurant, codePostal, menus, timestamp }] = Object.entries(restaurateur)[0];
 
         return (
-          <div className="car-item" key={index}>
-            <img alt='' className='car-image' src={imgPP} />
-            <ul className='marque-annee'>
+          <div className="card-item-pc" key={index}>
+            <img alt='' className='card-image-pc' src={imgPP} />
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
               <p className="p1" style={{ fontSize: "20px", fontWeight: "600", color: "hsl(210, 11%, 15%)" }}>
                 {nomRestaurant}
               </p>
               <p>{codePostal}</p>
-            </ul>
-            <button onClick={() => handleClickCommander(menus)}>Commander</button>
+              <button onClick={() => handleClickCommander(menus)}>Commander</button>
+            </div>
+            
           </div>
         );
       })}

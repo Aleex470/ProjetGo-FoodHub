@@ -12,6 +12,10 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+.btn-menu-accueil{
+   display: none;
+}
+
 html{
     scroll-behavior: smooth;
 }
@@ -68,11 +72,6 @@ a:hover{
    
 }
 
-.menu{
-   display: none;
-  
-}
-
 @media screen and (max-width : 767px) {
 
     .ul-navbar{
@@ -95,7 +94,7 @@ a:hover{
       justify-content: space-between;
     }
 
-    .menu{
+    .btn-menu-accueil{
         display: block;
         border: 0px solid ;
         background: white;
@@ -105,7 +104,7 @@ a:hover{
      }
 
 
-     .menu:hover{
+     .btn-menu-accueil:hover{
         background: #1c6aa9;
      }    
     
