@@ -1,41 +1,5 @@
-
-.search-bar-nomRest {
-   width: 50vh;
-   height: 50px;
-   border: 2px solid #1879ca;
-   border-radius: 8px;
-}
-
-
-.bouton-rechercher{
-    width: 23vh;
-    height: 50px;
-    background-color: #000000;
-    border: 2px solid #000000;
-    border-radius: 8px;
-    color: white;
-    margin-left: 1vh;
-}
-
-.card-item-notification {
-    background-color: red; /* Couleur de fond du cercle */
-    color: white; /* Couleur du texte dans le cercle */
-    border-radius: 50%; /* Pour rendre le span circulaire */
-    font-size: 15px;
-    position: absolute;
-    padding: 2px 8px;
-    top: 29%;
-  }
-
-.ecart{
-   margin-top: 25vh;
-}
-
-
-  /*#######################################*/
-
-  .div-menu-navbar-pc{
-    z-index: 10;
+.div-menu-navbar{
+    z-index: 1;
     top: 0;
     background: #1879ca;
     margin: 0;
@@ -45,19 +9,11 @@
     list-style-type: none;
     position: fixed;
     width: 100%;
-    height: 20vh;
-    align-items: center;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    background-image: url("/public/image/backSearch.jpg");
-    gap: 20%;
 }
 
-.btn-deconnec-menu-pc{
-    border: 0px solid ;
-    background: red;
-    color: white;
-    height: 7vh;
-    width: 17vh;
+.btn-menu-accueil{
+   display: none;
 }
 
 html{
@@ -90,20 +46,28 @@ a:hover{
     background: #1c6aa9;
 }
 
+.Explorer, .Explorer:hover{
+    text-decoration: none;
+    padding: 10px;
+    color: #1879ca;
+    background: white;
+    border-radius: 10px;
+}
 
-
-.icone-notification{
+.Icone{
     border-radius: 10px;
     padding: 10px;
     font-size: 20px;
     color: #1879ca;
+    background-color: white;
     text-align: center;
 }
 
 
 
 
-.icone-notification:hover{
+.Icone:hover{
+    color: white;
     background-color: #1c6aa9;
    
 }
@@ -123,14 +87,21 @@ a:hover{
     }
     
 
-    .div-menu-navbar-pc{
+    .div-menu-navbar{
        
        display: flex;
        margin: 0;
       justify-content: space-between;
     }
 
-    
+    .btn-menu-accueil{
+        display: block;
+        border: 0px solid ;
+        background: white;
+        border-radius: 5px;
+        color: #1879ca;
+        font-size: 20px;
+     }
 
 
      .btn-menu-accueil:hover{
@@ -138,4 +109,24 @@ a:hover{
      }    
     
 }
-  
+
+
+@media screen and (max-width : 409px) {
+     .Explorer{
+        font-size: 8px;
+        text-align: center;
+     }
+}
+
+
+/*##################################################*/
+
+.App .openModalBtn {
+    width: 200px;
+    height: 40px;
+    border: none;
+    border-radius: 6px;
+    background-color: cornflowerblue;
+    color: white;
+    cursor: pointer;
+  }

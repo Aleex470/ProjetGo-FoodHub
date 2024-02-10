@@ -2,12 +2,14 @@
 import React, { useState, useEffect } from 'react';
 import { BsList, BsCart, BsBell, BsFillPersonFill } from "react-icons/bs";
 import './Search.css';
+import {useNavigate} from "react-router-dom"
+import Notification from '../profilClient/notification';
+import ListDesNotifs from '../profilClient/listeDesNotifs';
 
+export default function Search({ onAdresseChange, senderType, senderID, receiverID }){
+  const [modalOpenNotifClient, setModalOpenNotifClient] = useState(false);
 
-export default function Search({ onAdresseChange }){
-
-  const [modalOpen, setModalOpen] = useState(false);
-  const [modalOpenR, setModalOpenR] = useState(false);
+  const navigate = useNavigate();
 
 
 
@@ -40,13 +42,16 @@ export default function Search({ onAdresseChange }){
       };
   }, []);
 
+  const handleDeconnecte = ()=>{
+    navigate("/")
+  } 
+
   return (
       <>
-          
           <ul className='div-menu-navbar-pc'>
-              <li><button className='btn-menu-accueil-pc'><BsList/></button></li>
+              <button onClick={handleDeconnecte} className='btn-deconnec-menu-pc'>Deconnexion</button>
               <ul className={showMenuList ? "ul-navbar-responsive" : "ul-navbar" } onClick={() => setShowMenuList(false)}>
-                  <li><a className="a" href="#restaurant-disponible">Accueil</a></li>
+              
                   <div>
                       <input
                         type="text"
@@ -61,9 +66,13 @@ export default function Search({ onAdresseChange }){
                   </div>   
               </ul>
               <li>
-                <a className="icone-notification" href="#div-form-con">
+                <a className="icone-notification" href="#div-form-con"
+                      onClick={() => {
+                        setModalOpenNotifClient(true);
+                       }}
+                    >
                    <BsBell/>
-                   <span className="card-item-notification">0</span>
+                   <span className="card-item-notification"><Notification senderType={senderType} senderID={senderID} receiverID={receiverID}/></span>
                 </a>
               </li>
          </ul>
@@ -71,8 +80,8 @@ export default function Search({ onAdresseChange }){
 
          </div>
         
-          {/*modalOpen && <Connection setOpenModal={setModalOpen} />*/}
-          {/*modalOpenR && <ConnectionRestaurant setOpenModalR={setModalOpenR} />*/}
+          {modalOpenNotifClient && <ListDesNotifs setModalOpenNotifClient={setModalOpenNotifClient}/>}
+          
       
       </>
   )

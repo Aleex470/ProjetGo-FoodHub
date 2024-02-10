@@ -6,6 +6,7 @@ import CommandeClient from "../CommandeClient/commandeClient";
 import ProfilClient from "../profilClient/ProfilClient";
 import ProfilRestaurateur from "../profilRestaurateur/ProfilRestaurateur";
 import ValidationCommande from "../validationCommande/ValidationCommande";
+import ProfilAdmin from "../administrateur/AdministrateurProfil";
 import {
   createBrowserRouter,
 } from "react-router-dom";
@@ -39,6 +40,12 @@ export const router = createBrowserRouter([
       path: "valider-commande",
       element:  <ValidationCommande/>,
     },
+  
+    {
+      path: "profil-administrateur",
+      element:  <ProfilAdmin/>
+    },
+  
   
 ]);
 ;

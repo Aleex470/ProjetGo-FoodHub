@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useLocation } from 'react-router-dom';
+import "./validationCommande.css"
 
 export default function ValidationCommande({ senderType, senderID, receiverID }) {
   const location = useLocation();
@@ -73,38 +74,38 @@ export default function ValidationCommande({ senderType, senderID, receiverID })
 
   const contenuCommandeStringEtIden = panier.map(item => `${item.nomMenu}, ${item.plat}, #${username}#`).join(' @ ');
   return (
-    <>
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
       <div>Contenu commande = {contenuCommandeStringEtIden}</div>
-      <h1>Valider votre commande votre username est { username}</h1>
-      {/* Affichez le contenu du panier ici */}
-      {panier.map((item, index) => (
-        <div key={index}>
-          <p>{item.nomMenu}</p>
-          <p>{item.plat}</p>
-          <p>{item.userNameRestaurateur}</p>
-        </div>
-      ))}
-
-      {/* Affichez la liste des messages */}
-      <div>
-        {messages.map((message, index) => (
+        <h1>Valider et Payer { username}</h1>
+        {/* Affichez le contenu du panier ici */}
+        {panier.map((item, index) => (
           <div key={index}>
-            <p>{(message.content).includes(username) ? message.content : ""}</p>
+            <p>{item.nomMenu}</p>
+            <p>{item.plat}</p>
+            <p>{item.userNameRestaurateur}</p>
           </div>
         ))}
-      </div>
 
-      {/* Champ d'entrée et bouton pour envoyer des messages */}
-      <div>
-        <input
-        
-          typeA="text"
-          value={messageInput}
-          placeholder="tape V pour valider"
-          onChange={(e) => setMessageInput(e.target.value)}
-        />
-        <button onClick={handleSendMessage}>Valider la commande</button>
+        {/* Affichez la liste des messages */}
+        <div>
+          {messages.map((message, index) => (
+            <div key={index}>
+              <p>{(message.content).includes(username) ? message.content : ""}</p>
+            </div>
+          ))}
+        </div>
+
+        {/* Champ d'entrée et bouton pour envoyer des messages */}
+        <div>
+          <input
+          
+            typeA="text"
+            value={messageInput}
+            placeholder="tape V pour valider"
+            onChange={(e) => setMessageInput(e.target.value)}
+          />
+          <button onClick={handleSendMessage}>Valider la commande</button>
       </div>
-    </>
+    </div>
   );
 }

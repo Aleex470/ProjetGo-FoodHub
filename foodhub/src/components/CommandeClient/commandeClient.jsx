@@ -49,11 +49,6 @@ export default function CommandeClient() {
               <BsList />
             </button>
           </li>
-          <li>
-            <a className="aPC" href="#restaurant-disponible">
-              <BsBell />
-            </a>
-          </li>
           <div>
             <input
               type="text"
@@ -73,45 +68,18 @@ export default function CommandeClient() {
           </li>
         </ul>
       </div>
-      <div id="div-listePLatePP">
-        {selectedTab.map((car, index) => (
-          <div className="car-itemPP" key={index}>
-            <img alt="" className="car-image" src={car.imageUrl} />
-            <ul className="marque-annee">
-              <p
-                className="p1"
-                style={{
-                  fontSize: "20px",
-                  fontWeight: "600",
-                  color: "hsl(210, 11%, 15%)",
-                }}
-              >
-                Menu
-              </p>
-            </ul>
-            <p>Type d'entrée : {car.entree}</p>
-            <p>Type de plat : {car.plat}</p>
-            <p>Type de dessert : {car.dessert}</p>
-            <button onClick={() => hangleContenuPanier(index)}>
-              Ajouter au panier
-            </button>
-          </div>
-        ))}
-      </div>
-      <h1>CommandeClient</h1>
-      <div className="div-card-menu-restaurant">
+      <h1 style={{marginTop : "30vh", display : "flex", justifyContent : "center"}}>Les Menus du restaurant</h1>
+      <div id="div-cardcollection-cm">
         {menus.map((menu, index) => (
-          <div key={index}>
-            <div className="proprite-menu">
-              <img src={menu.imgMenu} alt={menu.nomMenu} sizes="medium" />
-              <p>Dessert: {menu.dessert}</p>
-              <p>Entrée: {menu.entree}</p>
-              <p>Nom du Menu: {menu.nomMenu}</p>
-              <p>Plat: {menu.plat}</p>
-            </div>
-            <button onClick={() => hangleContenuPanier(index)}>
-              Ajouter
-            </button>
+          <div key={index} className="card-item-cm">
+              <img src={menu.imgMenu} alt={menu.nomMenu} sizes="medium" className="card-image-cm" />
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                <h4>{menu.nomMenu}</h4>
+                <p>Dessert : {menu.dessert}, Entrée: {menu.entree}, Plat: {menu.plat}</p>
+                <button className="btn-ajouter-cm" onClick={() => hangleContenuPanier(index)}>
+                  Ajouter le menu
+                </button>
+              </div>
           </div>
         ))}
       </div>

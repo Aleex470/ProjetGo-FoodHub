@@ -1,16 +1,15 @@
+
 import { useEffect, useState } from 'react';
-import './NavBar.css'
+import './AdministrateurProfil.css'
 import { BsFillPersonFill, BsList } from "react-icons/bs";
 import Connection from '../connection/ConnectionClient';
-import ConnectionRestaurant from '../connection/ConnectionRestaurateur';
-import ConnectionAdmin from '../administrateur/AministrateurLogin';
+import DonneeClient from './bdclient/DonneeClient';
 
 
-function NavBar() {
+function ProfilAdmin() {
 
-    const [modalOpen, setModalOpen] = useState(false);
-    const [modalOpenR, setModalOpenR] = useState(false);
-    const [modalOpenA, setModalOpenA] = useState(false);
+    const [modalOpenDonneeClient, setModalOpenDonneeClient] = useState(false);
+   
 
     const [showMenuList, setShowMenuList] = useState(window.innerWidth <= 767);
 
@@ -39,28 +38,27 @@ function NavBar() {
                     <li><a className="a" href="#Footer-div">A propos</a></li>
                     <li><a className="a" href="#Footer-div"
                          onClick={() => {
-                            setModalOpenA(true);
+                            setModalOpenDonneeClient(true);
                         }}
-                    >connexion administrateur</a></li>
+                    >Base de données clients</a></li>
                     <li><a className="a" href="#Footer-div"
                        onClick={() => {
-                        setModalOpenR(true);
+                        //setModalOpenDonneeClient(true);
                        }}
-                    >Connexion restaurateur</a></li>
-                    <li><a className='Explorer' href="creation-compte-restaurateur">Ajoutez un Restaurant</a></li>   
+                    >Base de données restaurateurs</a></li>
+                    <li><a className='Explorer' href="ac">Administrateur</a></li>   
                 </ul>
                 <li><a className="Icone" href="#div-form-connection-client" 
                       onClick={() => {
-                      setModalOpen(true);
+                      //setModalOpen(true);
                       }}
                  ><BsFillPersonFill/></a></li>
             </ul>
           
-            {modalOpen && <Connection setOpenModal={setModalOpen} />}
-            {modalOpenR && <ConnectionRestaurant setOpenModalR={setModalOpenR} />}
-            {modalOpenA && <ConnectionAdmin setOpenModalA={setModalOpenA} />}
+            {modalOpenDonneeClient && <DonneeClient setModalOpenDonneeClient={setModalOpenDonneeClient} />}
+           
         </>
     )
 }
 
-export default NavBar;
+export default ProfilAdmin;

@@ -4,11 +4,9 @@ import { useLocation } from 'react-router-dom';
 export default function Notification({ senderType, senderID, receiverID }) {
   const location = useLocation();
   const panier = location.state && location.state.panier ? location.state.panier : [];
-  const [messageInput, setMessageInput] = useState('');
   const [messages, setMessages] = useState([]);
   const socketRef = useRef(null);
   const [username, setUsername] = useState(null);
-  const [contenuCommande, setContenuCommande] = useState("")
 
   useEffect(() => {
   }, [panier]);
@@ -39,23 +37,5 @@ export default function Notification({ senderType, senderID, receiverID }) {
     }
   })
 
-  return (
-    <>
-      
-      {/* Affichez la liste des messages */}
-      <div>
-      Notif =  
-        {/*messages.map((message, index) => (
-          <div key={index}>
-            <p>{(message.content).includes(username) ? message.content : ""}</p>
-          </div>
-        ))*/
-        messages.length
-        }
-      </div>
-
-      {/* Champ d'entrée et bouton pour envoyer des messages */}
-     
-    </>
-  );
+  return (messages.length) - 1;
 }
