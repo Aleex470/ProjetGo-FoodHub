@@ -29,9 +29,9 @@ function DonneeClient({ setModalOpenDonneeClient }) {
   
 
   return (
-    <div className="modalBackground">
-      <div className="modalContainer">
-        <div className="titleCloseBtn">
+    <div className="modalBackground-bdclien">
+      <div className="modalContainer-bdclien">
+        <div className="titleCloseBtn-bdclien">
           <button
             onClick={() => {
                 setModalOpenDonneeClient(false);
@@ -40,10 +40,29 @@ function DonneeClient({ setModalOpenDonneeClient }) {
             Fermer
           </button>
         </div>
-        <div className="body">
-            <div id='div-form-connection-client'>
-               Donnée client
-            </div>
+        <div className="body" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent : "center" }}>
+         <table>
+            <tr>
+              <th>Id</th>
+              <th>Prenom</th>
+              <th>Nom</th>
+              <th>Code postal</th>
+              <th>Identifiant</th>
+              <th>Mot de passe</th>
+            </tr>
+
+           { donneeClient.map((data, index)=>
+                    <tr>
+                      <td>{data.id}</td>
+                      <td>{data.prenom}</td>
+                      <td>{data.nom}</td>
+                      <td>{data.codePostal}</td>
+                      <td>{data.identifiant}</td>
+                      <td>{data.motDePasse}</td>
+                    </tr>
+           )
+          }
+          </table>
         </div>
       </div>
     </div>
