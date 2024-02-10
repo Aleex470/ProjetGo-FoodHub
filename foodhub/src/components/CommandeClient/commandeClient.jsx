@@ -1,59 +1,43 @@
 import React, { useState, useEffect } from "react";
 import { BsList, BsCart, BsBell } from "react-icons/bs";
-import { useParams } from "react-router-dom";
+import { Link, useLocation } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
+
 import "./commandeClient.css";
 
 export default function CommandeClient() {
-  const { idRestaurant } = useParams();
+
+  const navigate = useNavigate();
+
+  const location = useLocation();
+  const menus = location.state ? location.state.menus : [];
 
   const [showMenuList, setShowMenuList] = useState(window.innerWidth <= 767);
   const [contenuPanier, setContenuPanier] = useState([]);
-
-  const listeDesPlats = [
-    {
-      imageUrl: "/image/resto.jpg",
-      entree: "salade",
-      plat: "yassa",
-      dessert: "Bissap",
-    },
-    {
-      imageUrl: "/image/resto.jpg",
-      entree: "oeuf",
-      plat: "filet de boeuf",
-      dessert: "glace",
-    },
-    {
-      imageUrl: "/image/resto.jpg",
-      entree: "entree",
-      plat: "plat",
-      dessert: "dessert",
-    },
-  ];
-
-  const [selectedRestaurant, setSelectedRestaurant] = useState(null)
   const [selectedTab, setSelectedTab] = useState([]);
-
-  useEffect(() => {
-    // Récupérez la valeur du stockage local
-    const selectedRestaurantString = localStorage.getItem('selectedRestaurant');
-    if (selectedRestaurantString) {
-      const selectedRestaurant = JSON.parse(selectedRestaurantString);
-      setSelectedRestaurant(selectedRestaurantString);
-      setSelectedTab(selectedRestaurant.tab || []);
-      console.log('Restaurant récupéré dans CommandeClient :', selectedRestaurant);
-      // Faites quelque chose avec la valeur récupérée
-    }
-  }, []);
+  const [commandeAValider, setCommandeAValider] = useState()
+ 
 
   const hangleContenuPanier = (index) => {
-    const selectedMenu = listeDesPlats[index];
-    setContenuPanier([...contenuPanier, selectedMenu]);
-    console.log(selectedMenu); // Affichez l'élément ajouté au panier
+    // Ajoutez le menu sélectionné à l'état du panier
+      setContenuPanier((prevPanier) => {
+        const nouveauPanier = [...prevPanier, menus[index]];
+        console.log(nouveauPanier);
+        setCommandeAValider(nouveauPanier)
+        return nouveauPanier;
+      });
   };
 
   const hangleClick = () => {
     setShowMenuList(!showMenuList);
-    console.log("L'objet = ")
+    console.log("L'objet =", menus);
+  };
+
+  const handleClickValidationCommande = () => {
+    // Naviguer vers la page de validation de la commande avec le panier comme paramètre
+    console.log('Contenu du panier à transmettre :', contenuPanier);
+    navigate('/valider-commande', { state: { panier: contenuPanier } });
   };
 
   return (
@@ -65,11 +49,6 @@ export default function CommandeClient() {
               <BsList />
             </button>
           </li>
-          <li>
-            <a className="aPC" href="#restaurant-disponible">
-              <BsBell />
-            </a>
-          </li>
           <div>
             <input
               type="text"
@@ -78,7 +57,7 @@ export default function CommandeClient() {
             />
           </div>
           <li>
-            <a className="IconePC" href="#div-form-connection-client">
+            <a className="IconePC" href="valider-commande" onClick={handleClickValidationCommande}>
               <BsCart />
               {contenuPanier.length > 0 && (
                 <span className="cart-item-count">
@@ -89,39 +68,21 @@ export default function CommandeClient() {
           </li>
         </ul>
       </div>
-      <div id="div-listePLatePP">
-      {selectedTab.map((car, index) => (
-        <div className="car-itemPP" key={index}>
-          <img alt="" className="car-image" src={car.imageUrl} />
-          <ul className="marque-annee">
-            <p
-              className="p1"
-              style={{
-                fontSize: "20px",
-                fontWeight: "600",
-                color: "hsl(210, 11%, 15%)",
-              }}
-            >
-              Menu
-            </p>
-          </ul>
-          <p>Type d'entrée : {car.entree}</p>
-          <p>Type de plat : {car.plat}</p>
-          <p>Type de dessert : {car.dessert}</p>
-          <button onClick={() => hangleContenuPanier(index)}>
-            Ajouter au panier
-          </button>
-        </div>
-      ))}
-      <div>
-        <p>Contenu du tableau :</p>
-        <ul>
-          {selectedTab.map((item, index) => (
-            <li key={index}>{JSON.stringify(item)}</li>
-          ))}
-        </ul>
+      <h1 style={{marginTop : "30vh", display : "flex", justifyContent : "center"}}>Les Menus du restaurant</h1>
+      <div id="div-cardcollection-cm">
+        {menus.map((menu, index) => (
+          <div key={index} className="card-item-cm">
+              <img src={menu.imgMenu} alt={menu.nomMenu} sizes="medium" className="card-image-cm" />
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                <h4>{menu.nomMenu}</h4>
+                <p>Dessert : {menu.dessert}, Entrée: {menu.entree}, Plat: {menu.plat}</p>
+                <button className="btn-ajouter-cm" onClick={() => hangleContenuPanier(index)}>
+                  Ajouter le menu
+                </button>
+              </div>
+          </div>
+        ))}
       </div>
-    </div>
-  </>
+    </>
   );
 }

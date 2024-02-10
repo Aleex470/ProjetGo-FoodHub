@@ -58,23 +58,22 @@
     border-radius: 8px;
 }
 
-#div-listePLatePP{
-    margin-top: 55vh;
+#div-cardcollection-cm{
+    margin-top: 15vh;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
-   
-}
+    gap: 3vh;
+  }
 
-.car-itemPP{
+.card-item-cm{
     border: 2px solid #1879ca;
-    padding: 0;
     background-color: white;
-    width: 66vh; /* 33.33% pour 3 items par ligne avec espacement de 20px */
-    margin: 15px 7px;
-    height: 70vh;
-}
+    width: 65vh; /* 33.33% pour 3 items par ligne avec espacement de 20px */
+    height: 60vh;
+  }
+
 
 .menu{
     display: block;
@@ -86,31 +85,33 @@
  }
 
 
-@media screen and (max-width : 767px) {
-
-    .ul-navbar{
-       display: none;
-    }
-
-    .ul-navbar-responsivePC{
-        padding: 0;
-        list-style-type: none;
-        display: flex;
-        flex-direction: column;
-        text-align: center;
-    }
-    
-
-    .div-menu-navbar{
-       
-       display: flex;
-       margin: 0;
-      justify-content: space-between;
-    }
 
 
-     .menu:hover{
-        background: #1c6aa9;
-     }    
-    
-}
+.card-image-cm{
+    /*size: "medium";
+    width: 55vh;
+    height: auto;*/
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    height: 35vh;
+    width: 50vh;
+  }
+  
+  .btn-ajouter-cm{
+    background-color: black;
+    color: white;
+    width: 20vh;
+    height: 5vh;
+    border: 2px solid black;
+  }
+  
+  
+  
+  
+  
+      
+  
+  
+  
+  

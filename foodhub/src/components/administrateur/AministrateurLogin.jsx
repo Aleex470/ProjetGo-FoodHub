@@ -1,25 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import {useNavigate} from "react-router-dom"
-import './ConnectionRestaurateur.css'
+import './AdministrateurLogin.css'
 
 
-function ConnectionRestaurant({ setOpenModalR }) {
+function ConnectionAdmin({ setOpenModalA }) {
     const navigate = useNavigate();
-    const [usernameRestaurateur, setUsernameRestaurateur] = useState('');
-    const [passwordRestaurateur, setPasswordRestaurateur] = useState('');
-    const [pageProfil, setPageProfil] = useState(null)
+    const [usernameAdmin, setUsernameAdmin] = useState('');
+    const [passwordAdmin, setPasswordAdmin] = useState('');
     const [error, setError] = useState('');
 
-    const handleLoginRestaurateur = async () => {
+    const handleLoginAdmin = async () => {
       try {
-        const response = await fetch("http://localhost:8080/login-restaurateur", {
+        const response = await fetch("http://localhost:8080/login-administrateur", {
           method: "POST",
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
           },
           body: new URLSearchParams({
-            username: usernameRestaurateur,
-            password: passwordRestaurateur,
+            username: usernameAdmin,
+            password: passwordAdmin,
           }),        
         });
   
@@ -27,8 +26,8 @@ function ConnectionRestaurant({ setOpenModalR }) {
           // Connexion réussie
           setError('');
           console.log("Connexion réussie");
-          sessionStorage.setItem('username',usernameRestaurateur);
-          navigate('/profil-restaurateur');
+          sessionStorage.setItem('username',usernameAdmin);
+          navigate('/profil-administrateur');
           // Rediriger ou effectuer d'autres actions après la connexion réussie
         } else {
           // Afficher l'erreur en cas d'identifiants incorrects
@@ -40,31 +39,29 @@ function ConnectionRestaurant({ setOpenModalR }) {
         setError("Erreur réseau");
       }
     };
-
   
-
+  sessionStorage.setItem('username',usernameAdmin);
   return (
     <div className="modalBackground">
       <div className="modalContainer">
         <div className="titleCloseBtn">
           <button
             onClick={() => {
-              setOpenModalR(false);
+              setOpenModalA(false);
             }}
           >
             X
           </button>
         </div>
         <div className="body">
-          <div id='div-form-connection-restaurateur'>
-              <form  id="form-connection-restaurateur">
-                  <h1>Connexion restaurateur</h1>
-                  <input type="text" className="username" value={usernameRestaurateur} onChange={(e) => setUsernameRestaurateur(e.target.value)} placeholder="Username..." />
-                  <input type="password" className="password" value={passwordRestaurateur} onChange={(e) => setPasswordRestaurateur(e.target.value)} placeholder="Password..." />
+          <div id='div-form-connection-client'>
+              <form  id="form-connection-client">
+                  <h1>Connexion Admin</h1>
+                  <input type="text" className="username" value={usernameAdmin} onChange={(e) => setUsernameAdmin(e.target.value)} placeholder="Username..." />
+                  <input type="password" className="password" value={passwordAdmin} onChange={(e) => setPasswordAdmin(e.target.value)} placeholder="Password..." />
                   <p style={{ color: 'red', fontSize : "14px" }}>{error}</p>
-                  <button className="bouton-connexion" onClick={handleLoginRestaurateur}>Connexion</button>
+                  <button className="bouton-connexion" onClick={handleLoginAdmin}>Connexion</button>
                   <ul className="div-createcmp-mdo">
-                      <li><a className="a-connextion" href="creation-compte-restaurateur">Créer un compte</a></li>
                       <li><a className="a-connextion" href="#ReinitialisationMDP">Mot de passe oublié</a></li>
                   </ul>  
               </form>
@@ -75,4 +72,6 @@ function ConnectionRestaurant({ setOpenModalR }) {
   );
 }
 
-export default ConnectionRestaurant;
+export default ConnectionAdmin;
+
+

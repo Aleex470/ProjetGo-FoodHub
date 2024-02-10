@@ -1,45 +1,38 @@
 import React, { useState, useEffect, Children } from 'react';
 import Search from '../search/Search';
 import CarCollection from '../cardCollection/CardCollection';
-
-
+import ValidationCommande from '../validationCommande/ValidationCommande';
+import Notification from './notification';
 
 
 export default function ProfilClient() {
   const [adresseRecherche, setAdresseRecherche] = useState('');
-  const [error, setError] = useState({});
-  const [donneeRestaurateurs, setDonneeRestaurateurs] = useState([]);
+  const [username, setUsername] = useState(null);
  
+  useEffect(()=>{
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("http://localhost:8080/donneerestaurateurs");
-        if (!response.ok) {
-          throw new Error("Erreur lors de la récupération des restaurateurs");
-        }
-
-        const data = await response.json();
-        setDonneeRestaurateurs(data);
-      } catch (error) {
-        console.error("Erreur réseau :", error);
-        setError("Erreur lors de la récupération des restaurateurs");
-      }
-    };
-
-    fetchData();
-
-  }, []); 
-
+    const storedUsername = sessionStorage.getItem('username');
+    if (storedUsername) {
+       setUsername(storedUsername);
+       console.log("username = " + storedUsername);
+    }
+  })
 
   const handleAdresseChange = (nouvelleAdresse) => {
     setAdresseRecherche(nouvelleAdresse);
   };
 
+  const senderType = "client";
+  const senderID = username; // Remplacez "client1" par l'identifiant du client réel
+  const receiverID = "lagondole"; // Remplacez "restaurateur1" par l'identifiant du restaurateur réel
+
   return (
     <>
-      <Search onAdresseChange={handleAdresseChange} />
-      <CarCollection adresseRecherche={adresseRecherche} tableauAutreObjet={donneeRestaurateurs} />
+      <Search onAdresseChange={handleAdresseChange} senderType={senderType} senderID={senderID} receiverID={receiverID} />
+      <CarCollection adresseRecherche={adresseRecherche}/>
+      <div>{username}</div>
+      <ValidationCommande senderType={senderType} senderID={senderID} receiverID={receiverID} />
+      {/*<Notification senderType={senderType} senderID={senderID} receiverID={receiverID}/>*/}
     </>
   );
 }

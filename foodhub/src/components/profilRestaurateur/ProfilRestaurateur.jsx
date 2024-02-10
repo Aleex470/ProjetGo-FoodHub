@@ -1,10 +1,14 @@
 import { BsList, BsCart, BsBell } from "react-icons/bs";
 import './ProfilRestaurateur.css'
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { storage } from "../../API/firebase";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { db } from "../../API/firebase"; // Assurez-vous d'ajuster le chemin d'accès en fonction de votre structure de projet Firebase
 import { addDoc, collection, serverTimestamp,onSnapshot  } from "firebase/firestore";
+import CommandeRecu from "./CommandeRecu"
+import { useLocation } from 'react-router-dom';
+import {useNavigate} from "react-router-dom"
+
 
 export default function ProfilRestaurateur(){
 
@@ -13,7 +17,8 @@ export default function ProfilRestaurateur(){
         nomMenu : "",
         entree : "",
         plat : "",
-        dessert : ""
+        dessert : "",
+        imgMenu : ""
     }
 
     const [data, setData] = useState(initialise);
@@ -21,14 +26,44 @@ export default function ProfilRestaurateur(){
     const [file, setFile] = useState(null);
     const [photoProfil, setPhotoProfil] = useState(null);
     const [progress, setProgress] = useState(null);
-    const [errors, setErrors] = useState({})
     const [isSubmit, setIsSubmit] = useState(false);
     const [username, setUsername] = useState(null);
     const [error, setError] = useState({})
-
     const [users, setUsers] = useState([]);
-
     const [restaurateurs, setRestaurateurs] = useState([]);
+    const navigate = useNavigate();
+    const [afficheCommande, setAfficheCommande] = useState(false)
+
+    //Pour les notifications
+    const location = useLocation();
+    const panier = location.state && location.state.panier ? location.state.panier : [];
+    const [messages, setMessages] = useState([]);
+    const socketRef = useRef(null);
+    const [notification, setNotification] = useState(0)
+
+    useEffect(() => {
+        console.log('Contenu de la commande du client:', panier);
+    }, [panier]);
+
+
+    useEffect(() => {
+        let totalNotifications = 0; // Variable pour stocker le nombre total de notifications
+
+        // Calculer le nombre total de notifications à partir des messages
+        messages.forEach(message => {
+        const parts = message.content.split('@').map(part => part.trim()).filter(part => part !== '');
+        parts.forEach(part => {
+            const subParts = part.split('#').map(subPart => subPart.trim()).filter(subPart => subPart !== '');
+            if (subParts.length === 2) {
+            totalNotifications++;
+            }
+        });
+        });
+
+        // Mettre à jour l'état de la notification avec le nombre total calculé
+        setNotification(totalNotifications);
+    }, [messages]);
+
 
 
     //Mise à jour des fichiers ajoutés
@@ -49,7 +84,10 @@ export default function ProfilRestaurateur(){
           };
       
           //fetchData();
+          
         const uploadFile = () =>{ 
+
+        if (photoProfil) {  
             const name = new Date().getTime() + file.name;
             const storageRef = ref(storage, file.name)
             const uploadTask = uploadBytesResumable(storageRef,file);
@@ -106,33 +144,38 @@ export default function ProfilRestaurateur(){
                 })
             }
             );
+        } else {
+            console.log("Les fichiers ou leurs noms sont null");
+        }
         }
 
-     photoProfil && file && uploadFile()
-
-     // Récupérer le nom d'utilisateur depuis sessionStorage
-     const storedUsername = sessionStorage.getItem('username');
-     if (storedUsername) {
-        setUsername(storedUsername);
-        console.log("username = " + storedUsername);
-     }
-
-     //Récupération donnée firebase
-     const unsub = onSnapshot(collection(db, storedUsername), (snapshot) => {
-        let list = [];
-        snapshot.docs.forEach((doc) => {
-          list.push({ ...doc.data() });
-        });
-        setUsers(list);
-      }, (error) => {
-        console.log("Erreur de récupération des données Firestore", error);
-      });
-  
-      return () => {
-        unsub();
-      };
+       file && uploadFile()
+    
     },[file, photoProfil, restaurateurs])
 
+    useEffect(() => {
+        // Récupérer le nom d'utilisateur depuis sessionStorage
+        const storedUsername = sessionStorage.getItem('username');
+        if (storedUsername) {
+            setUsername(storedUsername);
+            console.log("username = " + storedUsername);
+    
+            // Récupération donnée firebase
+            const unsub = onSnapshot(collection(db, storedUsername), (snapshot) => {
+                let list = [];
+                snapshot.docs.forEach((doc) => {
+                    list.push({ ...doc.data() });
+                });
+                setUsers(list);
+            }, (error) => {
+                console.log("Erreur de récupération des données Firestore", error);
+            });
+    
+            return () => {
+                unsub();
+            };
+        }
+    }, []);
     
 
     const handleChange = (e)=>{
@@ -163,62 +206,120 @@ export default function ProfilRestaurateur(){
         }
     };
     
+    const senderType = "restaurateur";
+    const senderID = username; // Remplacez "restaurateur1" par l'identifiant du restaurateur réel
+    const receiverID = "khalifa"
+
+
+    //pour les notifications
+    useEffect(() => {
+        // Initialiser la connexion WebSocket
+        socketRef.current = new WebSocket(`ws://localhost:8080/ws?senderType=${senderType}&senderID=${senderID}&receiverID=${receiverID}`);
+        // Écouter les messages du serveur
+        socketRef.current.onmessage = (event) => {
+        const message = JSON.parse(event.data);
+        console.log('Message from server:', message);
+
+        // Afficher le message dans la console du client ou du restaurateur
+        setMessages(prevMessages => [...prevMessages, message]);
+        };
+
+        return () => {
+        socketRef.current.close();
+        };
+    }, [senderType, senderID, receiverID]);
+
+    useEffect(() => {
+        let totalNotifications = 0; // Variable pour stocker le nombre total de notifications
+    
+        // Calculer le nombre total de notifications à partir des messages
+        messages.forEach(message => {
+          const parts = message.content.split('@').map(part => part.trim()).filter(part => part !== '');
+          parts.forEach(part => {
+            const subParts = part.split('#').map(subPart => subPart.trim()).filter(subPart => subPart !== '');
+            if (subParts.length === 2) {
+              totalNotifications++;
+            }
+          });
+        });
+    
+        // Mettre à jour l'état de la notification avec le nombre total calculé
+        setNotification(totalNotifications);
+      }, [messages]);
+    
+     const handleConsulteNotification = ()=>{
+           setNotification(0)
+           setAfficheCommande(true)
+      }
+
+      const handleDeconnecte = ()=>{
+            navigate("/")
+      } 
+    
 
     return(
         <>
         <div className='div-entete-pp-resta-et-navBar'>
             <div className='div-entete-pp-restau'>
-                <img className="photo-restaurant" src="" alt=""/>
-                <h1>{username}</h1>
+                <img className="photo-restaurant" src={users.length > 0 ? users[0].imgPP : ""} alt=""/>
+                <h1 style={{marginTop : "100px"}}>{username}</h1>
             </div>
+            <CommandeRecu senderType={senderType} senderID={senderID} receiverID={receiverID} afficheCommande={afficheCommande}/>
             <div className='div-entete-pp-restau-icone'>
-                <button className='menu'>
-                  <BsBell />
-                </button>
-                <button className='menu'>
-                  <BsList />
+                <button onClick={handleConsulteNotification} className='menu'>
+                  <BsBell /> <span className="card-item-notification-pr">{notification}</span> 
                 </button>
             </div>
         </div>
-        <div className='div-entete-pp-restau'>
-            <ul>
-                <li>Ajouter un menu</li>
-                <li>Supprimer un menu</li>
-            </ul>
+        <div className="div-btn-ajout-deconnect">
+            <button className="btn-ajouter-menu"><a style={{textDecoration : "none", color: "white"}} href="#le-formulaire-ajout-menu">Ajouter un menu</a></button>
+            <button onClick={handleDeconnecte} className='btn-deconnexion'>Deconnexion</button>
         </div>
-    <form onSubmit={(e) => handleSubmit(e, username)}>
-        <label>Nom du menu </label>
-        <input type="text" name="nomMenu" onChange={handleChange} value={nomMenu}/>
-        <br></br>
-        <label>Nom Entrée </label>
-        <input type="text" name="entree" onChange={handleChange} value={entree}/>
-         <br></br>
-        <label>Nom plat </label>
-        <input type="text" name="plat" onChange={handleChange} value={plat}/>
-        <br></br>
-        <label>Nom dessert </label>
-        <input type="text" name="dessert" onChange={handleChange} value={dessert}/>
-        <br></br>
-        <label>Image </label>
-        <input type="file"  onChange={(e)=>setFile(e.target.files[0])}/>
-        <br></br>
-        <label>Image profil </label>
-        <input type="file"  onChange={(e)=>setPhotoProfil(e.target.files[0])}/>
-        <br></br>
-        <button primary type="submit"
-         disabled={progress !== null && progress < 100}
-        >Ajouter</button>
-        <p>{username}</p>
-        <p>
+        <div className="div-cardcollection-pr">
         {
           users.map((user, index) => (
-          <div key={index}>
-            Nom du restaurant : {user.userNameReastaurateur}, Menu : {user.nomMenu}, Plat : {user.plat}, Dessert : {user.dessert}
-            <img src={user.imgMenu} alt=''/>
+          <div className="card-item-pr" key={index}>
+           <img className="card-image-pr" sizes="medium" src={user.imgMenu} alt=''/>
+           <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+               <h3> Menu </h3>
+            Plat : {user.plat}, Dessert : {user.dessert}
+           </div>
          </div>))
         }
-      </p>
-     </form>
-        </>
+      </div>
+      <div style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent : "center"}}>
+        <form id="le-formulaire-ajout-menu" onSubmit={(e) => handleSubmit(e, username)}>
+            <label>Nom du menu </label>
+            <br></br>
+            <input className="input" type="text" name="nomMenu" onChange={handleChange} value={nomMenu}/>
+            <br></br>
+            <label>Nom Entrée </label>
+            <br></br>
+            <input className="input" type="text" name="entree" onChange={handleChange} value={entree}/>
+            <br></br>
+            <label>Nom plat </label>
+            <br></br>
+            <input className="input" type="text" name="plat" onChange={handleChange} value={plat}/>
+            <br></br>
+            <label>Nom dessert </label>
+            <br></br>
+            <input className="input" type="text" name="dessert" onChange={handleChange} value={dessert}/>
+            <br></br>
+            <label>Image </label>
+            <br></br>
+            <input className="input" type="file"  onChange={(e)=>setFile(e.target.files[0])}/>
+            <br></br>
+            <label>Image profil </label>
+            <br></br>
+            <input className="input" type="file"  onChange={(e)=>setPhotoProfil(e.target.files[0])}/>
+            <br></br>
+            <button className="btn-ajouter-menus" primary type="submit"
+            disabled={progress !== null && progress < 100}
+            >Ajouter</button>
+            <p>{username}</p>
+        </form>
+     
+      </div>
+    </>
     )
 }
