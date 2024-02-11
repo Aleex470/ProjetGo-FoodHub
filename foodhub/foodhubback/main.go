@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"encoding/json"
+	"foodhubback/administrateur"
 	"foodhubback/connexionClient"
 	"foodhubback/connexionRestaurateur"
 	_ "github.com/go-sql-driver/mysql"
@@ -71,6 +72,18 @@ func main() {
 	r.HandleFunc("/donneeclients", func(w http.ResponseWriter, r *http.Request) {
 		connexionClient.GetClient(w, r, db)
 	}).Methods("GET")
+
+	//admin server
+	//HandleLoginAdmin
+	r.HandleFunc("/login-administrateur", func(w http.ResponseWriter, r *http.Request) {
+		administrateur.HandleLoginAdmin(w, r, db)
+	}).Methods("POST")
+	r.HandleFunc("/clients", func(w http.ResponseWriter, r *http.Request) {
+		administrateur.RechercherClients(w, r, db)
+	})
+	r.HandleFunc("/delete", func(w http.ResponseWriter, r *http.Request) {
+		administrateur.DeleteHandler(w, r, db)
+	})
 
 	// Ajout du point de terminaison WebSocket
 	r.HandleFunc("/ws", wsHandler)

@@ -48,7 +48,7 @@ export default function InscriptionUtilisateur() {
 
   return (
     <div id='div-form-connection-restaurant'>
-        <img src="/image/restaurateur.jpg" alt=""></img>
+        <img src="/image/client.png" alt=""></img>
         <form  id="form-connection-client">
           <h1>Inscription</h1>
           <div>

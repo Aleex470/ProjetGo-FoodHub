@@ -37,6 +37,8 @@ function ProfilAdmin() {
             <ul className='div-menu-navbar'>
                 <li><button onClick={hangleClick} className='btn-menu-accueil'><BsList/></button></li>
                 <ul className={showMenuList ? "ul-navbar-responsive" : "ul-navbar" } onClick={() => setShowMenuList(false)}>
+                    
+                <li><a className="a" href="/">Deconnexion</a></li>
                     <li><a className="a" href="#restaurant-disponible"
                          onClick={() => {
                             setModalOpenSupprimerClient(true);
