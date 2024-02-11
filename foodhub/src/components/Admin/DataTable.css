@@ -1,0 +1,14 @@
+thead{
+    background-color: rgb(236, 236, 236);
+}
+
+table {
+    border: 1px solid black;
+    border-radius: 7px;
+    padding: 6px;
+}
+
+th, td{
+    text-align: center;
+    padding: 1rem 3rem;
+}
