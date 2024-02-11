@@ -23,8 +23,8 @@ export default function ProfilClient() {
   };
 
   const senderType = "client";
-  const senderID = username; // Remplacez "client1" par l'identifiant du client réel
-  const receiverID = "lagondole"; // Remplacez "restaurateur1" par l'identifiant du restaurateur réel
+  const senderID = username;
+  const receiverID = "lagondole";
 
   return (
     <>
@@ -32,7 +32,6 @@ export default function ProfilClient() {
       <CarCollection adresseRecherche={adresseRecherche}/>
       <div>{username}</div>
       <ValidationCommande senderType={senderType} senderID={senderID} receiverID={receiverID} />
-      {/*<Notification senderType={senderType} senderID={senderID} receiverID={receiverID}/>*/}
     </>
   );
 }

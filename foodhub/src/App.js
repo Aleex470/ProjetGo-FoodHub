@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './App.css';
 import HomePage from './components/HomePage';
-import AdminPage from './components/AdminPage';
+
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -16,11 +16,7 @@ function App() {
 
   return (
     <div className="App">
-      {isLoggedIn ? (
-        <AdminPage onLogout={handleLogout} />
-      ) : (
-        <HomePage onLogin={handleLogin} />
-      )}
+        <HomePage/>
     </div>
   );
 }
