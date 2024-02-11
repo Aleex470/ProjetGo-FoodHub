@@ -47,30 +47,33 @@ export default function InscriptionUtilisateur() {
   
 
   return (
-    <div>
-      <h1>Inscription</h1>
-      <div>
-        <label>Prénom</label>
-        <input type="text" value={prenom} onChange={(e) => setPrenom(e.target.value)} />
+    <div id='div-form-connection-restaurant'>
+        <img src="/image/restaurateur.jpg" alt=""></img>
+        <form  id="form-connection-client">
+          <h1>Inscription</h1>
+          <div>
+            <label>Prénom</label><br></br>
+            <input className="username" type="text" value={prenom} onChange={(e) => setPrenom(e.target.value)} />
+          </div>
+          <div>
+            <label>Nom</label><br></br>
+            <input className="username" type="text" value={nom} onChange={(e) => setNom(e.target.value)} />
+          </div>
+          <div>
+            <label>Code Postal</label><br></br>
+            <input className="username" type="text" value={codePostal} onChange={(e) => setCodePostal(e.target.value)} />
+          </div>
+          <div>
+            <label>Identifiant</label><br></br>
+            <input className="username" type="text" value={identifiant} onChange={(e) => setIdentifiant(e.target.value)} />
+          </div>
+          <div>
+            <label>Mot de Passe</label><br></br>
+            <input className="username" type="password" value={motDePasse} onChange={(e) => setMotDePasse(e.target.value)} />
+          </div>
+          <p style={{ color: 'red', fontSize: "14px" }}>{error}</p>
+          <button className="bouton-connexion" onClick={handleInscription}>S'inscrire</button>
+        </form>
       </div>
-      <div>
-        <label>Nom</label>
-        <input type="text" value={nom} onChange={(e) => setNom(e.target.value)} />
-      </div>
-      <div>
-        <label>Code Postal</label>
-        <input type="text" value={codePostal} onChange={(e) => setCodePostal(e.target.value)} />
-      </div>
-      <div>
-        <label>Identifiant</label>
-        <input type="text" value={identifiant} onChange={(e) => setIdentifiant(e.target.value)} />
-      </div>
-      <div>
-        <label>Mot de Passe</label>
-        <input type="password" value={motDePasse} onChange={(e) => setMotDePasse(e.target.value)} />
-      </div>
-      <p style={{ color: 'red', fontSize: "14px" }}>{error}</p>
-      <button onClick={handleInscription}>S'inscrire</button>
-    </div>
   );
 }
