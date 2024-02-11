@@ -30,8 +30,7 @@ export default function ProfilClient() {
     <>
       <Search onAdresseChange={handleAdresseChange} senderType={senderType} senderID={senderID} receiverID={receiverID} />
       <CarCollection adresseRecherche={adresseRecherche}/>
-      <div>{username}</div>
-      <ValidationCommande senderType={senderType} senderID={senderID} receiverID={receiverID} />
+      {/*<ValidationCommande senderType={senderType} senderID={senderID} receiverID={receiverID} />*/}
     </>
   );
 }

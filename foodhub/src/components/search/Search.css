@@ -65,8 +65,7 @@ html{
 }
 
 
-.ul-navbar{
-    background:  #1879ca;
+.ul-navbar-pc{
     margin: 0;
     list-style-type: none;
     display: flex;
@@ -114,7 +113,7 @@ a:hover{
        display: none;
     }
 
-    .ul-navbar-responsive{
+    .ul-navbar-responsive-pc{
         padding: 0;
         list-style-type: none;
         display: flex;

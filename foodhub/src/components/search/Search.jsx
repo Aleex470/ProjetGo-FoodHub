@@ -12,14 +12,12 @@ export default function Search({ onAdresseChange, senderType, senderID, receiver
   const navigate = useNavigate();
   const [adresse, setAdresse] = useState('');
 
-/*################################################################# */
-
-
 
   const location = useLocation();
   const panier = location.state && location.state.panier ? location.state.panier : [];
   const [messages, setMessages] = useState([]);
   const socketRef = useRef(null);
+  const [notification, setNotification] = useState(0)
 
 
   useEffect(() => {
@@ -56,15 +54,6 @@ export default function Search({ onAdresseChange, senderType, senderID, receiver
 
 
 
-
-
-
-
-
-
-
-  /*#################################################################### */
-
   const handleInputChange = (e) => {
     setAdresse(e.target.value);
   };
@@ -99,7 +88,7 @@ export default function Search({ onAdresseChange, senderType, senderID, receiver
       <>
           <ul className='div-menu-navbar-pc'>
               <button onClick={handleDeconnecte} className='btn-deconnec-menu-pc'>Deconnexion</button>
-              <ul className={showMenuList ? "ul-navbar-responsive" : "ul-navbar" } onClick={() => setShowMenuList(false)}>
+              <ul className={showMenuList ? "ul-navbar-responsive-pc" : "ul-navbar-pc" } onClick={() => setShowMenuList(false)}>
               
                   <div>
                       <input
@@ -121,6 +110,7 @@ export default function Search({ onAdresseChange, senderType, senderID, receiver
                        }}
                     >
                    <BsBell/>
+                   
                    <span className="card-item-notification"><Notification senderType={senderType} senderID={senderID} receiverID={receiverID}/></span>
                 </a>
               </li>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useLocation } from 'react-router-dom';
 import "./validationCommande.css"
+import { useNavigate } from 'react-router-dom';
 
 export default function ValidationCommande({ senderType, senderID, receiverID }) {
   const location = useLocation();
@@ -10,6 +11,7 @@ export default function ValidationCommande({ senderType, senderID, receiverID })
   const socketRef = useRef(null);
   const [username, setUsername] = useState(null);
   const [lesMessages, setLesMessages] = useState([])
+  const navigate = useNavigate();
 
   useEffect(() => {
     console.log('Contenu du panier dans ValidationCommande:', panier);
@@ -52,6 +54,8 @@ export default function ValidationCommande({ senderType, senderID, receiverID })
       sessionStorage.setItem('lesMessages',lesMessages);
       // Effacer le champ d'entrée
       setMessageInput('');
+      navigate("/profil-client")
+      
     }
   };
 
@@ -90,11 +94,12 @@ export default function ValidationCommande({ senderType, senderID, receiverID })
         {/* Champ d'entrée et bouton pour envoyer des messages */}
         <div>
           <input
-          
-            typeA="text"
+            
+            type="text"
             value={messageInput}
-            placeholder="tape V pour valider"
-            onChange={(e) => setMessageInput(e.target.value)}
+            name={contenuCommandeStringEtIden}
+            placeholder="tape C pour confirmer"
+            onChange={(e) => setMessageInput(e.target.name)}
           />
           <button onClick={handleSendMessage}>Valider la commande</button>
       </div>
