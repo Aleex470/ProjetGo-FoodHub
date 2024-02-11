@@ -9,20 +9,12 @@ export default function ValidationCommande({ senderType, senderID, receiverID })
   const [messages, setMessages] = useState([]);
   const socketRef = useRef(null);
   const [username, setUsername] = useState(null);
-  const [contenuCommande, setContenuCommande] = useState("")
+  const [lesMessages, setLesMessages] = useState([])
 
   useEffect(() => {
     console.log('Contenu du panier dans ValidationCommande:', panier);
   }, [panier]);
 
-  useEffect(()=>{
-
-    const storedUsername = sessionStorage.getItem('username');
-    if (storedUsername) {
-       setUsername(storedUsername);
-       console.log("username = " + storedUsername);
-    }
-  })
 
   useEffect(() => {
     // Initialiser la connexion WebSocket
@@ -57,7 +49,7 @@ export default function ValidationCommande({ senderType, senderID, receiverID })
 
       // Ajouter le message à la liste des messages
       setMessages(prevMessages => [...prevMessages, message]);
-
+      sessionStorage.setItem('lesMessages',lesMessages);
       // Effacer le champ d'entrée
       setMessageInput('');
     }

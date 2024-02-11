@@ -8,6 +8,7 @@ import { addDoc, collection, serverTimestamp,onSnapshot  } from "firebase/firest
 import CommandeRecu from "./CommandeRecu"
 import { useLocation } from 'react-router-dom';
 import {useNavigate} from "react-router-dom"
+import ListDesNotifCm from "./listeDesNotificationCm";
 
 
 export default function ProfilRestaurateur(){
@@ -32,39 +33,77 @@ export default function ProfilRestaurateur(){
     const [users, setUsers] = useState([]);
     const [restaurateurs, setRestaurateurs] = useState([]);
     const navigate = useNavigate();
-    const [afficheCommande, setAfficheCommande] = useState(false)
-
-    //Pour les notifications
+    const [modalOpenNotifRestaurateur, setModalOpenNotifRestaurateur] = useState(false);
     const location = useLocation();
     const panier = location.state && location.state.panier ? location.state.panier : [];
     const [messages, setMessages] = useState([]);
     const socketRef = useRef(null);
     const [notification, setNotification] = useState(0)
+    const [clickedButtons, setClickedButtons] = useState([]);
+
+    const senderType = "restaurateur";
+    const senderID = username; // Remplacez "restaurateur1" par l'identifiant du restaurateur réel
+    const receiverID = "khalifa"
 
     useEffect(() => {
         console.log('Contenu de la commande du client:', panier);
     }, [panier]);
+    
+      useEffect(() => {
+        // Initialiser la connexion WebSocket
+        socketRef.current = new WebSocket(`ws://localhost:8080/ws?senderType=${senderType}&senderID=${senderID}&receiverID=${receiverID}`);
+        // Écouter les messages du serveur
+        socketRef.current.onmessage = (event) => {
+          const message = JSON.parse(event.data);
+          console.log('Message from server:', message);
+    
+          // Afficher le message dans la console du client ou du restaurateur
+          setMessages(prevMessages => [...prevMessages, message]);
+        };
+    
+        return () => {
+          socketRef.current.close();
+        };
+      }, [senderType, senderID, receiverID]);
 
-
+      
     useEffect(() => {
         let totalNotifications = 0; // Variable pour stocker le nombre total de notifications
-
+    
         // Calculer le nombre total de notifications à partir des messages
         messages.forEach(message => {
-        const parts = message.content.split('@').map(part => part.trim()).filter(part => part !== '');
-        parts.forEach(part => {
+          const parts = message.content.split('@').map(part => part.trim()).filter(part => part !== '');
+          parts.forEach(part => {
             const subParts = part.split('#').map(subPart => subPart.trim()).filter(subPart => subPart !== '');
             if (subParts.length === 2) {
-            totalNotifications++;
+              totalNotifications++;
             }
+          });
         });
-        });
-
+    
         // Mettre à jour l'état de la notification avec le nombre total calculé
         setNotification(totalNotifications);
-    }, [messages]);
-
-
+      }, [messages]);
+    
+    
+      /*useEffect(() => {
+        let totalNotifications = 0; // Variable pour stocker le nombre total de notifications
+    
+        // Calculer le nombre total de notifications à partir des messages
+        messages.forEach(message => {
+          const parts = message.content.split('@').map(part => part.trim()).filter(part => part !== '');
+          parts.forEach(part => {
+            const subParts = part.split('#').map(subPart => subPart.trim()).filter(subPart => subPart !== '');
+            if (subParts.length === 2) {
+              totalNotifications++;
+            }
+          });
+        });
+    
+        // Mettre à jour l'état de la notification avec le nombre total calculé
+        setNotification(totalNotifications);
+      }, [messages]);*/
+        
 
     //Mise à jour des fichiers ajoutés
     useEffect(()=>{
@@ -206,13 +245,30 @@ export default function ProfilRestaurateur(){
         }
     };
     
-    const senderType = "restaurateur";
-    const senderID = username; // Remplacez "restaurateur1" par l'identifiant du restaurateur réel
-    const receiverID = "khalifa"
+
+    
+
+  const handleSendToReceiver = (content) => {
+    const message = {
+      senderType,
+      senderID,
+      receiverID ,
+      messageType: 'text',
+      content,
+    };
+
+    // Envoyer le message au serveur
+    socketRef.current.send(JSON.stringify(message));
+
+    // Ajouter le bouton cliqué à la liste des boutons cliqués
+    setClickedButtons(prevClickedButtons => [...prevClickedButtons, content]);
+  };
+
+  
 
 
     //pour les notifications
-    useEffect(() => {
+    /*useEffect(() => {
         // Initialiser la connexion WebSocket
         socketRef.current = new WebSocket(`ws://localhost:8080/ws?senderType=${senderType}&senderID=${senderID}&receiverID=${receiverID}`);
         // Écouter les messages du serveur
@@ -227,29 +283,11 @@ export default function ProfilRestaurateur(){
         return () => {
         socketRef.current.close();
         };
-    }, [senderType, senderID, receiverID]);
+    }, [senderType, senderID, receiverID]);*/
 
-    useEffect(() => {
-        let totalNotifications = 0; // Variable pour stocker le nombre total de notifications
-    
-        // Calculer le nombre total de notifications à partir des messages
-        messages.forEach(message => {
-          const parts = message.content.split('@').map(part => part.trim()).filter(part => part !== '');
-          parts.forEach(part => {
-            const subParts = part.split('#').map(subPart => subPart.trim()).filter(subPart => subPart !== '');
-            if (subParts.length === 2) {
-              totalNotifications++;
-            }
-          });
-        });
-    
-        // Mettre à jour l'état de la notification avec le nombre total calculé
-        setNotification(totalNotifications);
-      }, [messages]);
-    
      const handleConsulteNotification = ()=>{
            setNotification(0)
-           setAfficheCommande(true)
+           setModalOpenNotifRestaurateur(true)
       }
 
       const handleDeconnecte = ()=>{
@@ -264,7 +302,9 @@ export default function ProfilRestaurateur(){
                 <img className="photo-restaurant" src={users.length > 0 ? users[0].imgPP : ""} alt=""/>
                 <h1 style={{marginTop : "100px"}}>{username}</h1>
             </div>
-            <CommandeRecu senderType={senderType} senderID={senderID} receiverID={receiverID} afficheCommande={afficheCommande}/>
+             {modalOpenNotifRestaurateur && <ListDesNotifCm setModalOpenNotifRestaurateur={setModalOpenNotifRestaurateur}
+             commandes={messages} handleSendToReceiver={handleSendToReceiver} clickedButtons={clickedButtons}
+             />}
             <div className='div-entete-pp-restau-icone'>
                 <button onClick={handleConsulteNotification} className='menu'>
                   <BsBell /> <span className="card-item-notification-pr">{notification}</span> 
